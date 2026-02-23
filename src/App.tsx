@@ -3,15 +3,19 @@ import { motion } from 'framer-motion';
 
 export default function App() {
   const videoUrl = '/1.mp4';
+  const audioUrl = '/yinpin.mp3';
   const [isEnglish, setIsEnglish] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [activeVideo, setActiveVideo] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const video1 = videoRef.current;
     const video2 = videoRef2.current;
+    const audio = audioRef.current;
     
     const startVideo1 = () => {
       if (video1) {
@@ -41,12 +45,34 @@ export default function App() {
       });
     }
 
+    if (audio) {
+      audio.loop = true;
+      audio.play().catch(() => {});
+    }
+
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -84,6 +110,9 @@ export default function App() {
           className={`absolute inset-0 w-full h-full object-cover ${activeVideo === 2 ? 'opacity-100' : 'opacity-0'}`}
         />
       </div>
+
+      {/* Audio Player */}
+      <audio ref={audioRef} src={audioUrl} loop />
 
       {/* Scanline Overlay */}
       <div className="absolute inset-0 z-50 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20" />
@@ -150,6 +179,47 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full pointer-events-auto relative"
         >
+          {/* Mute Toggle Button - above fullscreen */}
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: '-80px',
+              background: 'none',
+              border: 'none',
+              color: '#22c55e',
+              cursor: 'pointer',
+              padding: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 8,
+              transition: 'all 0.2s ease'
+            }}
+            title={isMuted ? "取消静音" : "静音"}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
+              e.currentTarget.style.transform = 'scale(1.05)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'none'
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              {/* 音符主体 */}
+              <path d="M9 18V6l12-3v15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2.5"/>
+              <circle cx="18" cy="15" r="3" stroke="currentColor" strokeWidth="2.5"/>
+              {/* 静音时的红色斜杠 */}
+              {isMuted && (
+                <line x1="2" y1="2" x2="22" y2="22" stroke="#ef4444" strokeWidth="3" strokeLinecap="round"/>
+              )}
+            </svg>
+          </button>
+
+          {/* Fullscreen Button */}
           <button
             onClick={toggleFullscreen}
             style={{
@@ -190,6 +260,7 @@ export default function App() {
               </svg>
             )}
           </button>
+
           <div className="bg-gradient-to-r from-red-700 to-red-900 border-t-4 border-red-500 shadow-2xl overflow-hidden flex">
             <div className="bg-black text-white px-6 py-3 font-black uppercase tracking-widest shrink-0 flex items-center z-10 shadow-[10px_0_20px_rgba(0,0,0,0.5)]">
               {texts.breakingCN}
