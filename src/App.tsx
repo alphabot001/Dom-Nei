@@ -89,9 +89,6 @@ export default function App() {
               <h1 className="text-xl md:text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-lg">
                 {texts.title}
               </h1>
-              <p className="text-red-500 font-mono text-xs mt-1 uppercase tracking-widest">
-                {texts.breaking}
-              </p>
             </div>
           </motion.div>
         </div>
