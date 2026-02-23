@@ -1,0 +1,5 @@
+{
+  "name": "IC Revolutionary Guard Broadcast",
+  "description": "A 3D interactive broadcast simulation using Three.js.",
+  "requestFramePermissions": []
+}
