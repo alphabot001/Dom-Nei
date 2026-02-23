@@ -65,7 +65,7 @@ export default function App() {
   };
 
   return (
-    <div className="w-full h-screen bg-black overflow-hidden relative font-sans text-white">
+    <div className="w-full h-screen bg-black overflow-hidden relative font-sans text-white" onDoubleClick={toggleFullscreen}>
       {/* Video Player - Seamless loop */}
       <div className="absolute inset-0 z-0">
         <video
