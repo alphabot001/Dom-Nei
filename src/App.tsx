@@ -196,18 +196,16 @@ export default function App() {
               justifyContent: 'center',
               fontSize: 24,
               lineHeight: 1,
-              transition: 'transform 0.15s, color 0.2s',
+              transition: 'all 0.2s ease',
               opacity: isMuted ? 0.75 : 1,
               borderRadius: 8
             }}
             title={isMuted ? "取消静音" : "静音"}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
-              e.currentTarget.style.transform = 'scale(1.15)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'none'
-              e.currentTarget.style.transform = 'scale(1)'
             }}
           >
             ♪
