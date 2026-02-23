@@ -1,47 +1,29 @@
-import React, { useRef, useState, useMemo } from 'react';
-import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { useTexture, Html, Stars } from '@react-three/drei';
-import * as THREE from 'three';
-import { TVShaderMaterial } from './TVShaderMaterial';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-extend({ TVShaderMaterial });
-
-// Add type for JSX
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      tVShaderMaterial: any;
-    }
-  }
-}
-
-const TVScreen = ({ imageUrl }: { imageUrl: string }) => {
-  const materialRef = useRef<any>(null);
-  const texture = useTexture(imageUrl);
-  
-  useFrame((state) => {
-    if (materialRef.current) {
-      materialRef.current.time = state.clock.elapsedTime;
-      materialRef.current.mouse = state.pointer;
-    }
-  });
-
-  return (
-    <mesh>
-      <planeGeometry args={[16, 9, 64, 64]} />
-      <tVShaderMaterial ref={materialRef} tDiffuse={texture} />
-    </mesh>
-  );
-};
-
 export default function App() {
-  const imageUrl = 'https://pic1.imgdb.cn/item/699c2ffc8d93ad3aa183e68b.png';
+  const videoUrl = '/1.mp4';
   const [isEnglish, setIsEnglish] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch(() => {});
+      video.addEventListener('ended', () => video.play());
+    }
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  };
 
   const texts = {
     title: isEnglish ? 'Dom Nei delivers a televised address' : 'Dom内衣发表全链电视讲话',
-    breaking: isEnglish ? 'BREAKING NEWS' : 'Breaking News',
     breakingCN: isEnglish ? 'BREAKING NEWS' : '突发新闻',
     ticker: isEnglish 
       ? 'The "IC" Revolutionary Guard has successfully suppressed the "Eight-Year Party," and victory belongs to the people!'
@@ -50,14 +32,16 @@ export default function App() {
 
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative font-sans text-white">
-      {/* 3D Canvas */}
-      <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 8], fov: 60 }}>
-          <color attach="background" args={['#050505']} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-          <TVScreen imageUrl={imageUrl} />
-        </Canvas>
-      </div>
+      {/* Video Player */}
+      <video
+        ref={videoRef}
+        src={videoUrl}
+        autoPlay
+        loop
+        playsInline
+        muted
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      />
 
       {/* Scanline Overlay */}
       <div className="absolute inset-0 z-50 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20" />
@@ -65,7 +49,7 @@ export default function App() {
       {/* Language Toggle Button */}
       <button
         onClick={() => setIsEnglish(!isEnglish)}
-        className="absolute top-6 right-6 z-20 pointer-events-auto bg-black/40 backdrop-blur-md text-red-500 font-bold text-sm px-3 py-1 rounded-sm border border-white/10 hover:bg-black/60 transition-colors"
+        className="absolute top-6 right-6 z-20 pointer-events-auto bg-black/40 backdrop-blur-md text-red-500 font-bold text-sm px-3 py-1 rounded-sm border border-white/10 hover:bg-black/60 hover:text-red-400 transition-colors"
       >
         {isEnglish ? 'CN' : 'EN'}
       </button>
@@ -85,8 +69,8 @@ export default function App() {
                 LIVE
               </div>
             </div>
-            <div>
-              <h1 className="text-xl md:text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-lg">
+            <div className="pointer-events-auto">
+              <h1 className="text-xl md:text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-lg select-text">
                 {texts.title}
               </h1>
             </div>
@@ -97,8 +81,14 @@ export default function App() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full pointer-events-auto"
+          className="w-full pointer-events-auto relative"
         >
+          <button
+            onClick={toggleFullscreen}
+            className="absolute -top-10 right-0 text-green-500 font-bold text-2xl hover:text-green-400 transition-colors"
+          >
+            ⛶
+          </button>
           <div className="bg-gradient-to-r from-red-700 to-red-900 border-t-4 border-red-500 shadow-2xl overflow-hidden flex">
             <div className="bg-black text-white px-6 py-3 font-black uppercase tracking-widest shrink-0 flex items-center z-10 shadow-[10px_0_20px_rgba(0,0,0,0.5)]">
               {texts.breakingCN}
