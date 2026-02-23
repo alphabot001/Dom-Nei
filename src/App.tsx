@@ -44,7 +44,7 @@ export default function App() {
     breaking: isEnglish ? 'BREAKING NEWS' : 'Breaking News',
     breakingCN: isEnglish ? 'BREAKING NEWS' : '突发新闻',
     ticker: isEnglish 
-      ? 'The "IC" Revolutionary Guard has successfully suppressed the "Eight-Year Party," and victory belongs to the people!   The "IC" Revolutionary Guard has successfully suppressed the "Eight-Year Party," and victory belongs to the people!   The "IC" Revolutionary Guard has successfully suppressed the "Eight-Year Party," and victory belongs to the people!'
+      ? 'The "IC" Revolutionary Guard has successfully suppressed the "Eight-Year Party," and victory belongs to the people!'
       : 'IC革命卫队已成功镇压八年党，胜利属于人民！   IC革命卫队已成功镇压八年党，胜利属于人民！   IC革命卫队已成功镇压八年党，胜利属于人民！'
   };
 
@@ -107,7 +107,7 @@ export default function App() {
               {texts.breakingCN}
             </div>
             <div className="flex-1 overflow-hidden relative flex items-center">
-              <div className="animate-marquee whitespace-nowrap text-xl md:text-2xl font-bold tracking-wide px-4">
+              <div className={`whitespace-nowrap text-xl md:text-2xl font-bold tracking-wide px-4 ${isEnglish ? 'animate-marquee-slow' : 'animate-marquee'}`}>
                 {texts.ticker}
               </div>
             </div>
