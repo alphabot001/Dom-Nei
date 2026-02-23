@@ -5,12 +5,25 @@ export default function App() {
   const videoUrl = '/1.mp4';
   const [isEnglish, setIsEnglish] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
+  const [activeVideo, setActiveVideo] = useState(1);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.play().catch(() => {});
-      video.addEventListener('ended', () => video.play());
+    const video1 = videoRef.current;
+    const video2 = videoRef2.current;
+    
+    if (video1) {
+      video1.play().catch(() => {});
+      video1.addEventListener('ended', () => {
+        setActiveVideo(2);
+        video2?.play();
+      });
+    }
+    if (video2) {
+      video2.addEventListener('ended', () => {
+        setActiveVideo(1);
+        video1?.play();
+      });
     }
   }, []);
 
@@ -32,16 +45,24 @@ export default function App() {
 
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative font-sans text-white">
-      {/* Video Player */}
-      <video
-        ref={videoRef}
-        src={videoUrl}
-        autoPlay
-        loop
-        playsInline
-        muted
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      />
+      {/* Video Player - Crossfade loop */}
+      <div className="absolute inset-0 z-0">
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          autoPlay
+          playsInline
+          muted
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${activeVideo === 1 ? 'opacity-100' : 'opacity-0'}`}
+        />
+        <video
+          ref={videoRef2}
+          src={videoUrl}
+          playsInline
+          muted
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${activeVideo === 2 ? 'opacity-100' : 'opacity-0'}`}
+        />
+      </div>
 
       {/* Scanline Overlay */}
       <div className="absolute inset-0 z-50 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20" />
