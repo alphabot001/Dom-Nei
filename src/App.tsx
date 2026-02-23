@@ -65,7 +65,7 @@ export default function App() {
       {/* Language Toggle Button */}
       <button
         onClick={() => setIsEnglish(!isEnglish)}
-        className="absolute top-6 right-6 z-20 pointer-events-auto bg-black/50 hover:bg-black/80 text-white px-3 py-1 rounded text-xs transition-colors border border-white/10"
+        className="absolute top-6 right-6 z-20 pointer-events-auto bg-black/40 backdrop-blur-md text-red-500 font-bold text-sm px-3 py-1 rounded-sm border border-white/10 hover:bg-black/60 transition-colors"
       >
         {isEnglish ? 'CN' : 'EN'}
       </button>
