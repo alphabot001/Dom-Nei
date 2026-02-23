@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 
 export default function App() {
   const videoUrl = '/1.mp4';
-  const audioUrl = '/yinpin.mp3';
+  const audioUrl = './yinpin.mp3';
   const [isEnglish, setIsEnglish] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -47,7 +47,7 @@ export default function App() {
 
     if (audio) {
       audio.loop = true;
-      audio.play().catch(() => {});
+      audio.volume = 1;
     }
 
     const handleFullscreenChange = () => {
@@ -69,8 +69,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.muted = isMuted;
+    const audio = audioRef.current;
+    if (audio) {
+      if (isMuted) {
+        audio.muted = true;
+      } else {
+        audio.muted = false;
+        audio.play().catch(() => {});
+      }
     }
   }, [isMuted]);
 
@@ -208,19 +214,30 @@ export default function App() {
               e.currentTarget.style.background = 'none'
             }}
           >
-            ♪
             <span style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: 3,
-              height: '80%',
-              background: '#ef4444',
-              transform: 'translate(-50%, -50%) rotate(45deg)',
-              borderRadius: 2,
-              display: isMuted ? 'block' : 'none',
-              pointerEvents: 'none'
-            }} />
+              position: 'relative',
+              width: '1.2em',
+              height: '1.2em',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1em'
+            }}>
+              ♪
+              <span style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: 4,
+                height: '85%',
+                background: '#ef4444',
+                opacity: 0.65,
+                transform: 'translate(-50%, -50%) rotate(45deg)',
+                borderRadius: 2,
+                pointerEvents: 'none',
+                visibility: isMuted ? 'visible' : 'hidden'
+              }} />
+            </span>
           </button>
 
           {/* Fullscreen Button */}
