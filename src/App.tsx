@@ -12,17 +12,31 @@ export default function App() {
     const video1 = videoRef.current;
     const video2 = videoRef2.current;
     
+    const startVideo1 = () => {
+      if (video1) {
+        video1.currentTime = 0;
+        video1.play().catch(() => {});
+      }
+    };
+    
+    const startVideo2 = () => {
+      if (video2) {
+        video2.currentTime = 0;
+        video2.play().catch(() => {});
+      }
+    };
+    
     if (video1) {
       video1.play().catch(() => {});
       video1.addEventListener('ended', () => {
         setActiveVideo(2);
-        video2?.play();
+        startVideo2();
       });
     }
     if (video2) {
       video2.addEventListener('ended', () => {
         setActiveVideo(1);
-        video1?.play();
+        startVideo1();
       });
     }
   }, []);
@@ -45,7 +59,7 @@ export default function App() {
 
   return (
     <div className="w-full h-screen bg-black overflow-hidden relative font-sans text-white">
-      {/* Video Player - Crossfade loop */}
+      {/* Video Player - Seamless loop */}
       <div className="absolute inset-0 z-0">
         <video
           ref={videoRef}
@@ -53,14 +67,14 @@ export default function App() {
           autoPlay
           playsInline
           muted
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${activeVideo === 1 ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 w-full h-full object-cover ${activeVideo === 1 ? 'opacity-100' : 'opacity-0'}`}
         />
         <video
           ref={videoRef2}
           src={videoUrl}
           playsInline
           muted
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${activeVideo === 2 ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 w-full h-full object-cover ${activeVideo === 2 ? 'opacity-100' : 'opacity-0'}`}
         />
       </div>
 
