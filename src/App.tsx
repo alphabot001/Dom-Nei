@@ -57,14 +57,18 @@ export default function App() {
     
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && document.fullscreenElement) {
+        e.preventDefault();
         document.exitFullscreen();
       }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+      }
     };
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, true);
     
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, []);
 
