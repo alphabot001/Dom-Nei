@@ -194,29 +194,35 @@ export default function App() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: 8,
-              transition: 'all 0.2s ease'
+              fontSize: 24,
+              lineHeight: 1,
+              transition: 'transform 0.15s, color 0.2s',
+              opacity: isMuted ? 0.75 : 1,
+              borderRadius: 8
             }}
             title={isMuted ? "取消静音" : "静音"}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
-              e.currentTarget.style.transform = 'scale(1.05)'
+              e.currentTarget.style.transform = 'scale(1.15)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = 'none'
               e.currentTarget.style.transform = 'scale(1)'
             }}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              {/* 音符主体 */}
-              <path d="M9 18V6l12-3v15" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2.5"/>
-              <circle cx="18" cy="15" r="3" stroke="currentColor" strokeWidth="2.5"/>
-              {/* 静音时的红色斜杠 */}
-              {isMuted && (
-                <line x1="2" y1="2" x2="22" y2="22" stroke="#ef4444" strokeWidth="3" strokeLinecap="round"/>
-              )}
-            </svg>
+            ♪
+            <span style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: 3,
+              height: '80%',
+              background: '#ef4444',
+              transform: 'translate(-50%, -50%) rotate(45deg)',
+              borderRadius: 2,
+              display: isMuted ? 'block' : 'none',
+              pointerEvents: 'none'
+            }} />
           </button>
 
           {/* Fullscreen Button */}
