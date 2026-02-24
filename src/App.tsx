@@ -93,7 +93,7 @@ export default function App() {
   };
 
   const texts = {
-    title: isEnglish ? 'Dom Nei delivers a televised address' : 'Dom内衣发表全链电视讲话',
+    title: isEnglish ? 'Dom Neiyi delivers a televised address' : 'Dom内衣发表电视讲话',
     breakingCN: isEnglish ? 'BREAKING NEWS' : '突发新闻',
     ticker: isEnglish 
       ? 'The "IC" Revolutionary Guard has successfully suppressed the "Eight-Year Party," and victory belongs to the people!'
