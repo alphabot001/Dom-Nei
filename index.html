@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/Dom-Nei/assets/tubiao-BxhnBUxM.png" />
+    <title>ICTV</title>
+    <style>
+      button:focus, button:focus-visible {
+        outline: none !important;
+      }
+      *:focus {
+        outline: none !important;
+      }
+    </style>
+    <script type="module" crossorigin src="/Dom-Nei/assets/index-CjWd6Aro.js"></script>
+    <link rel="stylesheet" crossorigin href="/Dom-Nei/assets/index-CWSSFC7l.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      document.addEventListener('contextmenu', e => e.preventDefault());
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Tab' ||
+            (e.ctrlKey && e.key === 'u') || 
+            (e.ctrlKey && e.key === 's') ||
+            (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+          e.preventDefault();
+        }
+      });
+      document.oncontextmenu = () => false;
+    </script>
+  </body>
+</html>
